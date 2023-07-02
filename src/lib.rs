@@ -2,12 +2,15 @@
 #![no_std]
 #![allow(non_camel_case_types)]
 
+/// "Type binding to C's `long double`
+#[cfg(doc)]
+pub type c_longdouble = ();
+
+#[cfg(not(doc))]
 cfg_if::cfg_if! {
     if #[cfg(target_env = "msvc")] {
-        #[doc = "Type binding to C's `long double`"]
         pub type c_longdouble = core::ffi::c_double;
     } else if #[cfg(target_arch = "arm")] {
-        #[doc = "Type binding to C's `long double`"]
         pub type c_longdouble = f64;
     } else if #[cfg(any(target_arch = "x86", target_arch = "x86_64"))] {
         compile_error!("`long double` on x86 is 80-bit extended precision; not yet supported");
